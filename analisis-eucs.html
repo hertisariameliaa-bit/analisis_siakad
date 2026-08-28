@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analisis Kepuasan Mahasiswa — Metode EUCS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2A45;
+    --ink-2:#24345C;
+    --paper:#F6F4EE;
+    --paper-2:#ECE7D9;
+    --gold:#B8863C;
+    --gold-dark:#8F6626;
+    --teal:#2F6F6B;
+    --rose:#A6483B;
+    --muted:#5B6478;
+    --line:rgba(27,42,69,0.14);
+    --white:#FFFFFF;
+    --radius:10px;
+    --serif:'Fraunces', Georgia, serif;
+    --sans:'Source Sans 3', -apple-system, sans-serif;
+    --mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--sans);
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.6;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+  a{color:inherit;}
+  img,svg{display:block;max-width:100%;}
+  h1,h2,h3{font-family:var(--serif); margin:0; color:var(--ink);}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--gold-dark);
+    font-weight:600;
+  }
+  .container{max-width:1120px; margin:0 auto; padding:0 28px;}
+  .section{padding:88px 0;}
+  .section-head{max-width:680px; margin-bottom:48px;}
+  .section-head h2{font-size:clamp(1.6rem,3vw,2.3rem); margin-top:10px; font-weight:600;}
+  .section-head p{color:var(--muted); margin-top:14px; font-size:1.02rem;}
+  .divider{height:1px; background:var(--line); border:none; margin:0;}
+
+  /* NAV */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(246,244,238,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1120px; margin:0 auto; padding:0 28px;
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+  }
+  .nav-brand{
+    font-family:var(--mono); font-size:0.82rem; font-weight:600;
+    letter-spacing:0.04em; display:flex; align-items:center; gap:10px;
+  }
+  .nav-brand .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+  .nav-links{display:flex; gap:28px; font-size:0.9rem; font-weight:500;}
+  .nav-links a{text-decoration:none; color:var(--ink-2); padding:4px 2px; border-bottom:2px solid transparent; transition:border-color .2s;}
+  .nav-links a:hover, .nav-links a:focus-visible{border-color:var(--gold);}
+  .nav-toggle{display:none;}
+  @media (max-width:760px){
+    .nav-links{display:none;}
+  }
+
+  /* HERO */
+  .hero{
+    padding:72px 0 60px;
+    background:
+      radial-gradient(circle at 82% 18%, rgba(184,134,60,0.10), transparent 45%),
+      var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr;} }
+  .hero h1{
+    font-size:clamp(1.7rem, 3.6vw, 2.55rem);
+    line-height:1.18;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .hero .accent{color:var(--gold-dark); font-style:italic;}
+  .hero-sub{color:var(--muted); font-size:1.05rem; margin-top:18px; max-width:52ch;}
+  .hero-meta{
+    display:flex; gap:26px; margin-top:30px; flex-wrap:wrap;
+    font-family:var(--mono); font-size:0.78rem; color:var(--ink-2);
+  }
+  .hero-meta div{border-left:2px solid var(--gold); padding-left:10px;}
+  .hero-meta span{display:block; color:var(--muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:2px;}
+  .hero-cta{display:flex; gap:14px; margin-top:34px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--sans); font-weight:600; font-size:0.92rem;
+    padding:12px 22px; border-radius:7px; border:1px solid transparent;
+    cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--ink); color:var(--paper);}
+  .btn-primary:hover{box-shadow:0 8px 20px rgba(27,42,69,0.25);}
+  .btn-ghost{border-color:var(--ink); color:var(--ink); background:transparent;}
+
+  /* PENTAGON SIGNATURE */
+  .pentagon-wrap{position:relative;}
+  .pentagon-svg{width:100%; height:auto;}
+  .pnode{cursor:pointer;}
+  .pnode circle{transition:r .15s ease, fill .15s ease;}
+  .pnode:hover circle, .pnode.active circle{fill:var(--gold); r:9;}
+  .pnode text{font-family:var(--mono); font-size:11.5px; fill:var(--ink-2); font-weight:600;}
+  .pentagon-caption{
+    margin-top:16px; padding:16px 18px; background:var(--white);
+    border:1px solid var(--line); border-radius:var(--radius);
+    font-size:0.88rem; color:var(--ink-2); min-height:64px;
+  }
+  .pentagon-caption strong{color:var(--ink); font-family:var(--serif); font-size:1rem; display:block; margin-bottom:4px;}
+
+  /* DIMENSION CARDS */
+  .dim-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:18px;
+  }
+  .dim-card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px 20px; position:relative; overflow:hidden;
+  }
+  .dim-card .num{font-family:var(--mono); font-size:0.72rem; color:var(--gold-dark); font-weight:600;}
+  .dim-card h3{font-size:1.08rem; margin-top:8px; font-weight:600;}
+  .dim-card p{font-size:0.9rem; color:var(--muted); margin-top:8px;}
+  .dim-card::before{
+    content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--teal);
+  }
+  .dim-card:nth-child(1)::before{background:#B8863C;}
+  .dim-card:nth-child(2)::before{background:#2F6F6B;}
+  .dim-card:nth-child(3)::before{background:#A6483B;}
+  .dim-card:nth-child(4)::before{background:#5C6E9E;}
+  .dim-card:nth-child(5)::before{background:#6C8C3E;}
+
+  /* SURVEY */
+  .survey-section{background:var(--ink); color:var(--paper);}
+  .survey-section .section-head h2{color:var(--paper);}
+  .survey-section .section-head p{color:rgba(246,244,238,0.72);}
+  .survey-section .eyebrow{color:var(--gold);}
+  .survey-card{
+    background:rgba(246,244,238,0.05);
+    border:1px solid rgba(246,244,238,0.16);
+    border-radius:var(--radius);
+    padding:28px;
+  }
+  .survey-dim{margin-bottom:30px;}
+  .survey-dim h4{
+    font-family:var(--mono); font-size:0.82rem; text-transform:uppercase; letter-spacing:0.06em;
+    color:var(--gold); margin-bottom:14px; display:flex; align-items:center; gap:10px;
+  }
+  .survey-dim h4::after{content:''; flex:1; height:1px; background:rgba(246,244,238,0.18);}
+  .likert-row{
+    padding:14px 0; border-bottom:1px solid rgba(246,244,238,0.1);
+  }
+  .likert-row p{margin:0 0 10px; font-size:0.94rem; color:rgba(246,244,238,0.92);}
+  .likert-scale{display:flex; gap:8px; flex-wrap:wrap;}
+  .likert-scale label{
+    flex:1; min-width:78px; text-align:center; font-size:0.78rem;
+    background:rgba(246,244,238,0.06); border:1px solid rgba(246,244,238,0.18);
+    border-radius:7px; padding:9px 6px; cursor:pointer; transition:all .15s ease;
+    color:rgba(246,244,238,0.8);
+  }
+  .likert-scale input{position:absolute; opacity:0; pointer-events:none;}
+  .likert-scale label:has(input:checked){
+    background:var(--gold); border-color:var(--gold); color:var(--ink); font-weight:600;
+  }
+  .likert-scale label:hover{border-color:var(--gold);}
+  .survey-submit{
+    margin-top:8px; width:100%; justify-content:center;
+    background:var(--gold); color:var(--ink); border:none; font-size:1rem; padding:14px;
+  }
+  .survey-submit:hover{box-shadow:0 8px 24px rgba(184,134,60,0.35);}
+  .survey-note{font-size:0.8rem; color:rgba(246,244,238,0.55); margin-top:10px; text-align:center;}
+
+  /* RESULTS */
+  .results-panel{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:30px;
+  }
+  .result-empty{color:var(--muted); font-size:0.95rem; padding:30px 0; text-align:center;}
+  .bar-row{margin-bottom:16px;}
+  .bar-row .bar-label{
+    display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:6px; font-weight:600;
+  }
+  .bar-row .bar-label span:last-child{font-family:var(--mono); color:var(--gold-dark);}
+  .bar-track{height:12px; background:var(--paper-2); border-radius:6px; overflow:hidden;}
+  .bar-fill{height:100%; border-radius:6px; transition:width .6s ease;}
+  .overall-box{
+    margin-top:26px; padding:20px; border-radius:var(--radius);
+    background:var(--paper); border:1px dashed var(--gold);
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+  }
+  .overall-box .score{font-family:var(--serif); font-size:2.4rem; font-weight:600; color:var(--ink);}
+  .overall-box .cat{font-family:var(--mono); font-size:0.85rem; padding:6px 14px; border-radius:20px; background:var(--gold); color:var(--ink); font-weight:600;}
+
+  /* METHOD FLOW */
+  .flow{display:flex; gap:0; align-items:stretch; flex-wrap:wrap;}
+  .flow-step{
+    flex:1; min-width:160px; background:var(--white); border:1px solid var(--line);
+    padding:20px; position:relative;
+  }
+  .flow-step:first-child{border-radius:var(--radius) 0 0 var(--radius);}
+  .flow-step:last-child{border-radius:0 var(--radius) var(--radius) 0;}
+  @media (max-width:760px){
+    .flow-step:first-child, .flow-step:last-child{border-radius:var(--radius);}
+  }
+  .flow-step .fnum{font-family:var(--mono); font-size:0.72rem; color:var(--gold-dark); font-weight:600;}
+  .flow-step h4{font-family:var(--serif); font-size:1rem; margin:8px 0 6px; font-weight:600;}
+  .flow-step p{font-size:0.84rem; color:var(--muted); margin:0;}
+
+  /* TABLE */
+  table.pop-table{width:100%; border-collapse:collapse; font-size:0.92rem;}
+  table.pop-table th{
+    text-align:left; font-family:var(--mono); font-size:0.72rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--muted); padding:10px 14px; border-bottom:2px solid var(--ink);
+  }
+  table.pop-table td{padding:12px 14px; border-bottom:1px solid var(--line);}
+  table.pop-table tr:hover td{background:rgba(184,134,60,0.05);}
+
+  /* CONCLUSION */
+  .concl-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  @media (max-width:800px){.concl-grid{grid-template-columns:1fr;}}
+  .concl-card{background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:22px;}
+  .concl-card .eyebrow{color:var(--teal);}
+  .concl-card p{font-size:0.92rem; color:var(--ink-2); margin-top:10px;}
+
+  footer{
+    background:var(--ink-2); color:rgba(246,244,238,0.75); padding:40px 0 28px; font-size:0.85rem;
+  }
+  footer .container{display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px;}
+  footer strong{color:var(--paper); font-family:var(--serif); font-weight:600; font-size:1rem;}
+  footer .fcol{max-width:320px;}
+  .back-top{
+    position:fixed; right:20px; bottom:20px; width:42px; height:42px; border-radius:50%;
+    background:var(--ink); color:var(--paper); display:flex; align-items:center; justify-content:center;
+    text-decoration:none; box-shadow:0 6px 18px rgba(0,0,0,0.25); opacity:0; pointer-events:none;
+    transition:opacity .2s ease; font-size:1.1rem;
+  }
+  .back-top.show{opacity:1; pointer-events:auto;}
+  :focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand"><span class="dot"></span>EUCS · SIAKAD STUDY</div>
+    <nav class="nav-links">
+      <a href="#tentang">Tentang</a>
+      <a href="#metode">Metode EUCS</a>
+      <a href="#survei">Survei</a>
+      <a href="#hasil">Hasil</a>
+      <a href="#kesimpulan">Kesimpulan</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <p class="eyebrow">Penelitian Sistem Informasi · Kepuasan Pengguna</p>
+      <h1>Analisis Faktor–Faktor yang Memengaruhi <span class="accent">Kepuasan Mahasiswa</span> dalam Menggunakan Sistem Informasi Akademik</h1>
+      <p class="hero-sub">Menggunakan Metode <strong>End User Computing Satisfaction (EUCS)</strong> untuk mengukur kepuasan mahasiswa berdasarkan lima dimensi: isi, akurasi, format, kemudahan penggunaan, dan ketepatan waktu.</p>
+      <div class="hero-meta">
+        <div><span>Metode</span>EUCS — Doll &amp; Torkzadeh</div>
+        <div><span>Dimensi</span>5 Variabel Utama</div>
+        <div><span>Objek</span>Sistem Informasi Akademik</div>
+      </div>
+      <div class="hero-cta">
+        <a href="#survei" class="btn btn-primary">Isi Survei Kepuasan →</a>
+        <a href="#metode" class="btn btn-ghost">Pelajari Metode EUCS</a>
+      </div>
+    </div>
+
+    <div class="pentagon-wrap">
+      <svg class="pentagon-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram lima dimensi EUCS">
+        <polygon points="200,110 297,180 262,290 138,290 103,180" fill="rgba(184,134,60,0.06)" stroke="var(--line)" stroke-width="1"/>
+        <polygon points="200,140 275,192 248,275 152,275 125,192" fill="none" stroke="var(--line)" stroke-width="1"/>
+        <line x1="200" y1="200" x2="200" y2="50" stroke="var(--line)"/>
+        <line x1="200" y1="200" x2="342.7" y2="153.6" stroke="var(--line)"/>
+        <line x1="200" y1="200" x2="288.2" y2="321.4" stroke="var(--line)"/>
+        <line x1="200" y1="200" x2="111.8" y2="321.4" stroke="var(--line)"/>
+        <line x1="200" y1="200" x2="57.3" y2="153.6" stroke="var(--line)"/>
+        <circle cx="200" cy="200" r="3" fill="var(--ink)"/>
+
+        <g class="pnode" data-dim="0" tabindex="0">
+          <circle cx="200" cy="50" r="7" fill="var(--ink)"/>
+          <text x="200" y="34" text-anchor="middle">CONTENT</text>
+        </g>
+        <g class="pnode" data-dim="1" tabindex="0">
+          <circle cx="342.7" cy="153.6" r="7" fill="var(--ink)"/>
+          <text x="360" y="150" text-anchor="start">ACCURACY</text>
+        </g>
+        <g class="pnode" data-dim="2" tabindex="0">
+          <circle cx="288.2" cy="321.4" r="7" fill="var(--ink)"/>
+          <text x="288" y="345" text-anchor="middle">FORMAT</text>
+        </g>
+        <g class="pnode" data-dim="3" tabindex="0">
+          <circle cx="111.8" cy="321.4" r="7" fill="var(--ink)"/>
+          <text x="112" y="345" text-anchor="middle">EASE OF USE</text>
+        </g>
+        <g class="pnode" data-dim="4" tabindex="0">
+          <circle cx="57.3" cy="153.6" r="7" fill="var(--ink)"/>
+          <text x="40" y="150" text-anchor="end">TIMELINESS</text>
+        </g>
+      </svg>
+      <div class="pentagon-caption" id="pentagonCaption">
+        <strong>Arahkan kursor ke setiap titik</strong>
+        Setiap sudut mewakili satu dimensi EUCS yang membentuk kerangka penelitian ini.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tentang">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Tentang Penelitian</p>
+      <h2>Mengapa Kepuasan Pengguna SIAKAD Penting Diukur?</h2>
+      <p>Sistem Informasi Akademik (SIAKAD) adalah kanal utama mahasiswa mengakses KRS, nilai, jadwal kuliah, dan informasi administrasi lainnya. Efektivitas sistem tidak hanya diukur dari sisi teknis, tetapi juga dari sisi persepsi kepuasan penggunanya.</p>
+    </div>
+
+    <div class="dim-grid" style="grid-template-columns:repeat(3,1fr);">
+      <div class="dim-card">
+        <span class="num">01 — LATAR BELAKANG</span>
+        <h3>Ketergantungan pada Sistem Digital</h3>
+        <p>Mahasiswa mengandalkan SIAKAD setiap hari, sehingga kualitas pengalaman pengguna berdampak langsung pada aktivitas akademik.</p>
+      </div>
+      <div class="dim-card">
+        <span class="num">02 — RUMUSAN MASALAH</span>
+        <h3>Faktor Apa yang Berpengaruh?</h3>
+        <p>Belum diketahui secara pasti dimensi mana dari EUCS yang paling dominan memengaruhi tingkat kepuasan mahasiswa.</p>
+      </div>
+      <div class="dim-card">
+        <span class="num">03 — TUJUAN PENELITIAN</span>
+        <h3>Mengukur &amp; Menganalisis</h3>
+        <p>Mengidentifikasi serta menganalisis pengaruh lima dimensi EUCS terhadap kepuasan mahasiswa pengguna SIAKAD.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="section" id="metode">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Kerangka Metodologi</p>
+      <h2>Lima Dimensi End User Computing Satisfaction</h2>
+      <p>Model EUCS yang dikembangkan oleh Doll &amp; Torkzadeh (1988) mengukur kepuasan pengguna akhir terhadap suatu sistem informasi melalui lima dimensi berikut.</p>
+    </div>
+
+    <div class="dim-grid">
+      <div class="dim-card">
+        <span class="num">DIMENSI 1</span>
+        <h3>Content (Isi)</h3>
+        <p>Kelengkapan dan kesesuaian informasi yang disajikan sistem dengan kebutuhan mahasiswa.</p>
+      </div>
+      <div class="dim-card">
+        <span class="num">DIMENSI 2</span>
+        <h3>Accuracy (Akurasi)</h3>
+        <p>Tingkat keakuratan data yang diolah dan ditampilkan, seperti nilai dan jadwal kuliah.</p>
+      </div>
+      <div class="dim-card">
+        <span class="num">DIMENSI 3</span>
+        <h3>Format (Tampilan)</h3>
+        <p>Kejelasan tata letak, estetika, dan kemudahan membaca informasi pada antarmuka sistem.</p>
+      </div>
+      <div class="dim-card">
+        <span class="num">DIMENSI 4</span>
+        <h3>Ease of Use (Kemudahan)</h3>
+        <p>Sejauh mana sistem mudah dipelajari dan dioperasikan oleh mahasiswa sebagai pengguna akhir.</p>
+      </div>
+      <div class="dim-card">
+        <span class="num">DIMENSI 5</span>
+        <h3>Timeliness (Ketepatan Waktu)</h3>
+        <p>Kecepatan dan ketepatan waktu sistem dalam menyajikan informasi terkini kepada pengguna.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="section" id="populasi">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Desain Penelitian</p>
+      <h2>Populasi, Sampel &amp; Alur Analisis</h2>
+      <p>Penelitian ini bersifat kuantitatif dengan pendekatan survei terhadap mahasiswa aktif pengguna SIAKAD.</p>
+    </div>
+
+    <div class="flow" style="margin-bottom:36px;">
+      <div class="flow-step">
+        <span class="fnum">01</span>
+        <h4>Penyebaran Kuesioner</h4>
+        <p>Instrumen Likert 1–5 disusun berdasarkan lima dimensi EUCS.</p>
+      </div>
+      <div class="flow-step">
+        <span class="fnum">02</span>
+        <h4>Uji Validitas &amp; Reliabilitas</h4>
+        <p>Data diuji kelayakannya sebelum dianalisis lebih lanjut.</p>
+      </div>
+      <div class="flow-step">
+        <span class="fnum">03</span>
+        <h4>Analisis Regresi</h4>
+        <p>Menguji pengaruh tiap dimensi terhadap kepuasan mahasiswa.</p>
+      </div>
+      <div class="flow-step">
+        <span class="fnum">04</span>
+        <h4>Interpretasi Hasil</h4>
+        <p>Menentukan dimensi paling dominan serta rekomendasi perbaikan.</p>
+      </div>
+    </div>
+
+    <table class="pop-table">
+      <thead>
+        <tr><th>Komponen</th><th>Keterangan</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Populasi</td><td>Mahasiswa aktif pengguna Sistem Informasi Akademik</td></tr>
+        <tr><td>Teknik Sampling</td><td>Probability / Simple Random Sampling</td></tr>
+        <tr><td>Instrumen</td><td>Kuesioner skala Likert (1 = Sangat Tidak Setuju, 5 = Sangat Setuju)</td></tr>
+        <tr><td>Variabel Bebas</td><td>Content, Accuracy, Format, Ease of Use, Timeliness</td></tr>
+        <tr><td>Variabel Terikat</td><td>Kepuasan Mahasiswa (User Satisfaction)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section survey-section" id="survei">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Coba Sekarang</p>
+      <h2>Survei Kepuasan EUCS Interaktif</h2>
+      <p>Isi pernyataan berikut sesuai pengalaman Anda menggunakan Sistem Informasi Akademik. Hasil akan dihitung otomatis berdasarkan kerangka lima dimensi EUCS.</p>
+    </div>
+
+    <div class="survey-card">
+      <form id="eucsForm">
+        <!-- dimension blocks injected by JS -->
+      </form>
+      <button type="button" class="btn survey-submit" id="submitSurvey">Lihat Hasil Analisis Saya</button>
+      <p class="survey-note">Data ini hanya diproses secara lokal di perangkat Anda untuk keperluan demonstrasi.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="hasil">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Hasil Analisis</p>
+      <h2>Skor Kepuasan per Dimensi</h2>
+      <p>Grafik berikut menampilkan rata-rata skor tiap dimensi EUCS berdasarkan jawaban yang Anda isi pada survei di atas.</p>
+    </div>
+
+    <div class="results-panel" id="resultsPanel">
+      <div class="result-empty" id="resultEmpty">Belum ada data. Silakan isi survei di atas terlebih dahulu untuk melihat hasil analisis.</div>
+      <div id="resultBars" style="display:none;"></div>
+      <div class="overall-box" id="overallBox" style="display:none;">
+        <div>
+          <div class="eyebrow">Skor Rata-rata Keseluruhan</div>
+          <div class="score" id="overallScore">0.0</div>
+        </div>
+        <div class="cat" id="overallCat">—</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="section" id="kesimpulan">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Ringkasan</p>
+      <h2>Implikasi &amp; Kesimpulan</h2>
+    </div>
+    <div class="concl-grid">
+      <div class="concl-card">
+        <p class="eyebrow">Akademis</p>
+        <p>Memperkaya kajian sistem informasi manajemen, khususnya penerapan model EUCS pada konteks pendidikan tinggi.</p>
+      </div>
+      <div class="concl-card">
+        <p class="eyebrow">Praktis</p>
+        <p>Memberi masukan bagi pengelola SIAKAD untuk meningkatkan dimensi yang dinilai paling lemah oleh mahasiswa.</p>
+      </div>
+      <div class="concl-card">
+        <p class="eyebrow">Lanjutan</p>
+        <p>Membuka peluang penelitian lanjutan dengan menambahkan variabel lain seperti kepercayaan atau loyalitas pengguna.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="fcol">
+      <strong>EUCS · Kepuasan Mahasiswa SIAKAD</strong>
+      <p>Analisis Faktor-Faktor yang Memengaruhi Kepuasan Mahasiswa dalam Menggunakan Sistem Informasi Akademik.</p>
+    </div>
+    <div class="fcol">
+      <p class="eyebrow" style="color:var(--gold)">Referensi Model</p>
+      <p>Doll, W. J., &amp; Torkzadeh, G. (1988). The Measurement of End-User Computing Satisfaction.</p>
+    </div>
+  </div>
+</footer>
+
+<a href="#" class="back-top" id="backTop" aria-label="Kembali ke atas">↑</a>
+
+<script>
+(function(){
+  // ---------- Pentagon interaction ----------
+  const dims = [
+    { key:'content', name:'Content (Isi)', desc:'Mengukur kelengkapan dan relevansi informasi akademik yang disajikan sistem.' },
+    { key:'accuracy', name:'Accuracy (Akurasi)', desc:'Mengukur keakuratan data seperti nilai, KRS, dan jadwal kuliah.' },
+    { key:'format', name:'Format (Tampilan)', desc:'Mengukur kejelasan tata letak dan estetika antarmuka sistem.' },
+    { key:'ease', name:'Ease of Use (Kemudahan)', desc:'Mengukur seberapa mudah sistem dipelajari dan dioperasikan.' },
+    { key:'timeliness', name:'Timeliness (Ketepatan Waktu)', desc:'Mengukur kecepatan dan ketepatan waktu penyajian informasi.' }
+  ];
+  const caption = document.getElementById('pentagonCaption');
+  document.querySelectorAll('.pnode').forEach(node=>{
+    const d = dims[+node.dataset.dim];
+    const setCaption = ()=>{
+      caption.innerHTML = '<strong>'+d.name+'</strong>'+d.desc;
+      document.querySelectorAll('.pnode').forEach(n=>n.classList.remove('active'));
+      node.classList.add('active');
+    };
+    node.addEventListener('mouseenter', setCaption);
+    node.addEventListener('focus', setCaption);
+  });
+
+  // ---------- Survey questions ----------
+  const questions = {
+    content: {
+      label:'Content (Isi)', color:'#B8863C',
+      items:[
+        'Sistem menyediakan informasi akademik yang lengkap sesuai kebutuhan saya.',
+        'Informasi yang dihasilkan sistem relevan dengan aktivitas perkuliahan saya.'
+      ]
+    },
+    accuracy: {
+      label:'Accuracy (Akurasi)', color:'#2F6F6B',
+      items:[
+        'Data nilai, KRS, dan jadwal pada sistem sudah akurat.',
+        'Jarang terjadi kesalahan data pada sistem ini.'
+      ]
+    },
+    format: {
+      label:'Format (Tampilan)', color:'#A6483B',
+      items:[
+        'Tampilan sistem informasi akademik rapi dan menarik.',
+        'Format penyajian informasi mudah saya pahami.'
+      ]
+    },
+    ease: {
+      label:'Ease of Use (Kemudahan)', color:'#5C6E9E',
+      items:[
+        'Sistem mudah dioperasikan tanpa perlu pelatihan khusus.',
+        'Menu dan fitur pada sistem mudah saya temukan.'
+      ]
+    },
+    timeliness: {
+      label:'Timeliness (Ketepatan Waktu)', color:'#6C8C3E',
+      items:[
+        'Sistem menyajikan informasi secara tepat waktu.',
+        'Sistem dapat saya akses kapan pun saya membutuhkannya.'
+      ]
+    }
+  };
+
+  const scaleLabels = ['Sangat Tidak Setuju','Tidak Setuju','Cukup','Setuju','Sangat Setuju'];
+  const form = document.getElementById('eucsForm');
+  let html = '';
+  Object.entries(questions).forEach(([key, dim])=>{
+    html += '<div class="survey-dim"><h4>'+dim.label+'</h4>';
+    dim.items.forEach((text, i)=>{
+      const name = key+'_'+i;
+      html += '<div class="likert-row"><p>'+text+'</p><div class="likert-scale">';
+      scaleLabels.forEach((lbl, val)=>{
+        html += '<label>'+lbl+'<input type="radio" name="'+name+'" value="'+(val+1)+'"></label>';
+      });
+      html += '</div></div>';
+    });
+    html += '</div>';
+  });
+  form.innerHTML = html;
+
+  // ---------- Compute & render results ----------
+  function categoryFor(score){
+    if(score >= 4.21) return {label:'Sangat Puas', color:'#2F6F6B'};
+    if(score >= 3.41) return {label:'Puas', color:'#B8863C'};
+    if(score >= 2.61) return {label:'Cukup Puas', color:'#8F6626'};
+    if(score >= 1.81) return {label:'Kurang Puas', color:'#A6483B'};
+    return {label:'Tidak Puas', color:'#A6483B'};
+  }
+
+  document.getElementById('submitSurvey').addEventListener('click', function(){
+    const dimScores = {};
+    let missing = false;
+
+    Object.entries(questions).forEach(([key, dim])=>{
+      let sum = 0, count = 0;
+      dim.items.forEach((text, i)=>{
+        const name = key+'_'+i;
+        const checked = form.querySelector('input[name="'+name+'"]:checked');
+        if(!checked){ missing = true; return; }
+        sum += parseInt(checked.value, 10);
+        count++;
+      });
+      dimScores[key] = count ? (sum/count) : 0;
+    });
+
+    if(missing){
+      alert('Mohon lengkapi seluruh pernyataan sebelum melihat hasil.');
+      return;
+    }
+
+    const overall = Object.values(dimScores).reduce((a,b)=>a+b,0) / Object.keys(dimScores).length;
+    const cat = categoryFor(overall);
+
+    document.getElementById('resultEmpty').style.display = 'none';
+    const barsWrap = document.getElementById('resultBars');
+    barsWrap.style.display = 'block';
+    let barsHtml = '';
+    Object.entries(questions).forEach(([key, dim])=>{
+      const score = dimScores[key];
+      const pct = (score/5*100).toFixed(0);
+      barsHtml += '<div class="bar-row"><div class="bar-label"><span>'+dim.label+'</span><span>'+score.toFixed(2)+' / 5.00</span></div>' +
+        '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%; background:'+dim.color+';"></div></div></div>';
+    });
+    barsWrap.innerHTML = barsHtml;
+
+    const overallBox = document.getElementById('overallBox');
+    overallBox.style.display = 'flex';
+    document.getElementById('overallScore').textContent = overall.toFixed(2);
+    const catEl = document.getElementById('overallCat');
+    catEl.textContent = cat.label;
+    catEl.style.background = cat.color;
+    catEl.style.color = '#F6F4EE';
+
+    document.getElementById('hasil').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  // ---------- Back to top ----------
+  const backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', ()=>{
+    backTop.classList.toggle('show', window.scrollY > 500);
+  });
+  backTop.addEventListener('click', (e)=>{
+    e.preventDefault();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+})();
+</script>
+</body>
+</html>
